@@ -49,6 +49,7 @@ function App() {
         <div className="mt-4 w-96 max-w-full px-5">
           <InputField
             onEnterPressed={(e) => {
+              setResult(undefined);
               setIsLoading(true);
               fetchWallet(e.currentTarget.value).then((json) => {
                 setResult(json);
