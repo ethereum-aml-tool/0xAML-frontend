@@ -10,6 +10,7 @@ function App() {
 
   const [result, setResult] = useState<AMLResult>();
   const [rawResult, setRawResult] = useState<String>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchWallet = async (address: String) => {
     const response = await fetch(
@@ -48,18 +49,29 @@ function App() {
         <div className="mt-4 w-96 max-w-full px-5">
           <InputField
             onEnterPressed={(e) => {
+              setIsLoading(true);
               fetchWallet(e.currentTarget.value).then((json) => {
                 setResult(json);
                 setRawResult(JSON.stringify(json));
                 console.log(json);
+                setIsLoading(false);
               });
             }}
           />
         </div>
+        {isLoading && (
+          <div className="loading-indicator">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        )}
         {result && (
-          <div className="mt-3 rounded-md text-tornado-green border-2 border-solid border-tornado-green p-3">
+          <div className="mt-3 rounded-md border-2 border-solid border-tornado-green p-3 text-tornado-green">
             <p>
-              <span className="font-bold italic">[{result.address}]</span> <br />
+              <span className="font-bold italic">[{result.address}]</span>{" "}
+              <br />
               <span className="font-bold">json:</span> {rawResult}
             </p>
           </div>
