@@ -9,6 +9,7 @@ const InputField: FC<InputFieldProps> = ({hint, onEnterPressed}) => {
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === "Enter") {
         onEnterPressed?.(event);
+        event.currentTarget.value = "";
       }
     };
 
