@@ -2,23 +2,14 @@ import { FC } from "react";
 
 type InputFieldProps = {
     hint?: string;
+    onEnterPressed?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
-const InputField: FC<InputFieldProps> = ({hint}) => {
+const InputField: FC<InputFieldProps> = ({hint, onEnterPressed}) => {
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === "Enter") {
-        fetchWallet(event.currentTarget.value).then((json) => {
-            console.log(json);
-        });
+        onEnterPressed?.(event);
       }
-    };
-
-    const fetchWallet = async (address: String) => {
-        const response = await fetch(`http://127.0.0.1:8000/analyze?address=${address}`, {
-          method: "GET",
-        });
-
-        return response.json();
     };
 
   return (
@@ -26,7 +17,7 @@ const InputField: FC<InputFieldProps> = ({hint}) => {
       <input
         className="h-full w-full bg-tornado-dark px-1 text-tornado-green outline-none"
         type="text"
-        placeholder=" 0xDbD038..."
+        placeholder={typeof hint !== "undefined" ? hint : " 0xDbD038..."}
         onKeyDown={handleKeyDown}
         autoFocus
       />

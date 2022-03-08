@@ -3,6 +3,25 @@ import logo from "../assets/images/tornado-main.svg"; // TODO REMOVE THIS, cool 
 import InputField from "./components/InputField";
 
 function App() {
+  type AMLResult = {
+    address: string;
+    aml: string;
+  };
+
+  const [result, setResult] = useState<AMLResult>();
+  const [rawResult, setRawResult] = useState<String>();
+
+  const fetchWallet = async (address: String) => {
+    const response = await fetch(
+      `http://127.0.0.1:8000/analyze?address=${address}`,
+      {
+        method: "GET",
+      }
+    );
+
+    return response.json();
+  };
+
   return (
     <div className="text-center selection:bg-green-900">
       <header className="flex min-h-screen flex-col items-center justify-center bg-tornado-dark text-white">
@@ -27,8 +46,24 @@ function App() {
           Money Laundering Detection
         </p>
         <div className="mt-4 w-96 max-w-full px-5">
-          <InputField />
+          <InputField
+            onEnterPressed={(e) => {
+              fetchWallet(e.currentTarget.value).then((json) => {
+                setResult(json);
+                setRawResult(JSON.stringify(json));
+                console.log(json);
+              });
+            }}
+          />
         </div>
+        {result && (
+          <div className="mt-3 rounded-md text-tornado-green border-2 border-solid border-tornado-green p-3">
+            <p>
+              <span className="font-bold italic">[{result.address}]</span> <br />
+              <span className="font-bold">json:</span> {rawResult}
+            </p>
+          </div>
+        )}
         <p className="mt-3 flex gap-3 text-center text-[#8d96a7]">
           <a
             className="text-tornado-green transition-all hover:text-green-700"
