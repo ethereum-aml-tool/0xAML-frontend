@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import logo from "../assets/images/tornado-main.svg"; // TODO REMOVE THIS, cool but stolen from Tornado Cash
 import InputField from "./components/InputField";
 
@@ -22,6 +22,17 @@ function App() {
 
     return response.json();
   };
+
+  const FooterLink: FC<{ link: string; text: string }> = ({ link, text }) => (
+    <a
+      className="text-tornado-green transition-all hover:text-green-700"
+      href={link}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {text}
+    </a>
+  );
 
   return (
     <div className="text-center selection:bg-green-900">
@@ -78,32 +89,20 @@ function App() {
           </div>
         )}
         <p className="mt-3 flex gap-3 text-center text-[#8d96a7]">
-          <a
-            className="text-tornado-green transition-all hover:text-green-700"
-            href="https://github.com/ethereum-aml-tool"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            GitHub
-          </a>
+          <FooterLink
+            link="https://github.com/ethereum-aml-tool"
+            text="GitHub"
+          />
           {" | "}
-          <a
-            className="text-tornado-green transition-all hover:text-green-700"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            What is this?
-          </a>
+          <FooterLink
+            link="https://vitejs.dev/guide/features.html"
+            text="What is this?"
+          />
           {" | "}
-          <a
-            className="text-tornado-green transition-all hover:text-green-700"
-            href="https://www.chalmers.se/en/education/programmes/masters-info/Pages/Software-Engineering-and-Technology.aspx"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Chalmers
-          </a>
+          <FooterLink
+            link="https://www.chalmers.se/en/education/programmes/masters-info/Pages/Software-Engineering-and-Technology.aspx"
+            text="Chalmers"
+          />
         </p>
       </header>
     </div>
