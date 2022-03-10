@@ -53,7 +53,7 @@ function App() {
   );
 
   return (
-    <div className="text-center selection:bg-green-900">
+    <div className="text-center selection:bg-green-900 font-mono">
       <header className="flex min-h-screen flex-col items-center justify-center bg-tornado-dark text-white">
         <img
           src={logo}
@@ -69,10 +69,10 @@ function App() {
           "
           }
         </style>
-        <p className="mt-14 bg-gradient-to-r from-tornado-green to-green-600 bg-clip-text text-4xl font-black text-transparent selection:bg-transparent">
+        <p className="font-sans mt-14 bg-gradient-to-r from-tornado-green to-green-600 bg-clip-text text-4xl font-black text-transparent selection:bg-transparent">
           0x<span className="italic">AML</span>
         </p>
-        <p className="bg-gradient-to-r from-tornado-green to-green-600 bg-clip-text text-2xl font-black text-transparent selection:bg-transparent">
+        <p className="font-sans bg-gradient-to-r from-tornado-green to-green-600 bg-clip-text text-2xl font-black text-transparent selection:bg-transparent">
           Money Laundering Detection
         </p>
         <div className="mt-4 w-96 max-w-full px-5">
@@ -80,6 +80,7 @@ function App() {
             onEnterPressed={(e) => {
               const address = e.currentTarget.value;
               setAccount(undefined);
+              setTransactions(undefined);
               setIsLoading(true);
               fetchAccount(address).then((json) => {
                 setAccount(json);
@@ -103,7 +104,7 @@ function App() {
         {account && (
           <div className="mt-3 p-3 text-tornado-green">
             <p>
-              <span className="font-bold italic">
+              <span className="font-bold italic text-lg">
                 [{"0x" + account.address.substring(2).toLocaleUpperCase()}]
               </span>{" "}
               <br />
@@ -113,7 +114,7 @@ function App() {
               <span className="font-bold">Risk Estimation:</span>{" "}
               {account.risk_level ?? "None"}
             </p>
-            {transactions && (
+            {transactions && transactions.length > 0 && (
               <div className="mt-3">
                 <h3 className="mb-2 text-xl font-bold">
                   Flagged Transactions:
