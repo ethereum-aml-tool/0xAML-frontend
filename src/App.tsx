@@ -1,26 +1,44 @@
 import { FC, useState } from "react";
 import logo from "../assets/images/tornado-main.svg"; // TODO REMOVE THIS, cool but stolen from Tornado Cash
 import InputField from "./components/InputField";
+import TransactionTable from "./components/TransactionTable";
 
 function App() {
-  type AMLResult = {
-    address: string;
-    aml: string;
-  };
+  const API_URL = "http://127.0.0.1:8000";
 
-  const [result, setResult] = useState<AMLResult>();
-  const [rawResult, setRawResult] = useState<String>();
+  const [account, setAccount] = useState<Account>();
+  const [transactions, setTransactions] = useState<Transaction[]>();
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchWallet = async (address: String) => {
-    const response = await fetch(
-      `http://127.0.0.1:8000/analyze?address=${address}`,
+  const fetchAccount = async (address: String) => {
+    const response = await fetch(`${API_URL}/accounts/${address}`, {
+      method: "GET",
+    });
+
+    return response.json();
+  };
+
+  const fetchTransactions = async (address: String) => {
+    const fromResponse = await fetch(
+      `${API_URL}/transactions/from/${address}`,
       {
         method: "GET",
       }
     );
+    const toResponse = await fetch(`${API_URL}/transactions/to/${address}`, {
+      method: "GET",
+    });
 
-    return response.json();
+    let transactions: Transaction[] = [
+      ...(await fromResponse.json()),
+      ...(await toResponse.json()),
+    ];
+
+    return transactions.sort(
+      (a, b) =>
+        new Date(b.block_timestamp).getTime() -
+        new Date(a.block_timestamp).getTime()
+    );
   };
 
   const FooterLink: FC<{ link: string; text: string }> = ({ link, text }) => (
@@ -60,13 +78,16 @@ function App() {
         <div className="mt-4 w-96 max-w-full px-5">
           <InputField
             onEnterPressed={(e) => {
-              setResult(undefined);
+              const address = e.currentTarget.value;
+              setAccount(undefined);
               setIsLoading(true);
-              fetchWallet(e.currentTarget.value).then((json) => {
-                setResult(json);
-                setRawResult(JSON.stringify(json));
-                console.log(json);
+              fetchAccount(address).then((json) => {
+                setAccount(json);
                 setIsLoading(false);
+
+                fetchTransactions(address).then((transactions) => {
+                  setTransactions(transactions);
+                });
               });
             }}
           />
@@ -79,13 +100,27 @@ function App() {
             <div></div>
           </div>
         )}
-        {result && (
-          <div className="mt-3 rounded-md border-2 border-solid border-tornado-green p-3 text-tornado-green">
+        {account && (
+          <div className="mt-3 p-3 text-tornado-green">
             <p>
-              <span className="font-bold italic">[{result.address}]</span>{" "}
+              <span className="font-bold italic">
+                [{"0x" + account.address.substring(2).toLocaleUpperCase()}]
+              </span>{" "}
               <br />
-              <span className="font-bold">json:</span> {rawResult}
+              <span className="font-bold">Balance:</span>{" "}
+              {account.balance ?? "? ETH"}
+              <br />
+              <span className="font-bold">Risk Estimation:</span>{" "}
+              {account.risk_level ?? "None"}
             </p>
+            {transactions && (
+              <div className="mt-3">
+                <h3 className="mb-2 text-xl font-bold">
+                  Flagged Transactions:
+                </h3>
+                <TransactionTable transactions={transactions} />
+              </div>
+            )}
           </div>
         )}
         <p className="mt-3 flex gap-3 text-center text-[#8d96a7]">
