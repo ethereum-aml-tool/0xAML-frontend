@@ -5,23 +5,41 @@ type TransactionBoxProps = {
 };
 
 const TransactionTable: FC<TransactionBoxProps> = ({ transactions }) => {
+  const EXPLORER_URL = "https://etherscan.io";
+
   const TableHeaderCell: FC<{ data: string }> = ({ data }) => (
     <th className=" border-tornado-green p-2">{data}</th>
   );
-  // TODO Make the if else cleaner...
-  const TableDataCell: FC<{ data: any }> = ({ data }) => (
-    <td className="has-tooltip border border-tornado-green p-2">
-      {data.length > 20 && (
+
+  const TableDataCell: FC<{ data: any; link?: string }> = ({ data, link }) => {
+    const isAddress = data.length >= 42;
+
+    let contentDiv;
+    if (isAddress) {
+      contentDiv = (
         <div>
-          <span className="tooltip -mt-8 rounded bg-tornado-green p-1 text-tornado-dark shadow-lg font-mono">
+          <span className="tooltip -mt-8 rounded bg-tornado-green p-1 font-mono text-tornado-dark shadow-lg">
             {data}
           </span>
-          {data.substring(0, 15)}...
+          <a
+            href={link ?? EXPLORER_URL}
+            target="_blank"
+            className="hover:underline"
+          >
+            {data.substring(0, 15)}...
+          </a>
         </div>
-      )}
-      {data.length <= 20 && <div>{data}</div>}
-    </td>
-  );
+      );
+    } else {
+      contentDiv = data;
+    }
+
+    return (
+      <td className="has-tooltip border border-tornado-green p-2">
+        {contentDiv}
+      </td>
+    );
+  };
 
   return (
     <table className="table-auto border-collapse border-2 border-tornado-green">
@@ -37,9 +55,18 @@ const TransactionTable: FC<TransactionBoxProps> = ({ transactions }) => {
       <tbody className="">
         {transactions.map((t) => (
           <tr key={t.hash}>
-            <TableDataCell data={t.hash} />
-            <TableDataCell data={t.from_address} />
-            <TableDataCell data={t.to_address} />
+            <TableDataCell
+              data={t.hash}
+              link={`${EXPLORER_URL}/tx/${t.hash}`}
+            />
+            <TableDataCell
+              data={t.from_address}
+              link={`${EXPLORER_URL}/address/${t.from_address}`}
+            />
+            <TableDataCell
+              data={t.to_address}
+              link={`${EXPLORER_URL}/address/${t.to_address}`}
+            />
             <TableDataCell
               data={
                 t.value.toString().length == 1 ? t.value.toFixed(2) : t.value

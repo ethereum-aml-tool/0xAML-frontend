@@ -115,8 +115,8 @@ function App() {
               {account.risk_level ?? "None"}
             </p>
             {transactions && transactions.length > 0 && (
-              <div className="mt-3">
-                <h3 className="mb-2 text-xl font-bold">
+              <div className="mt-4">
+                <h3 className="mb-2 text-xl font-bold text-left">
                   Flagged Transactions:
                 </h3>
                 <TransactionTable transactions={transactions} />
