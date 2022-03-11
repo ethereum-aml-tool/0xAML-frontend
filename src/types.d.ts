@@ -12,3 +12,9 @@ type Transaction = {
   from_address: string;
   to_address: string;
 };
+
+type HaircutResult = {
+    address: string;
+    balance: number;
+    taint: number;
+};

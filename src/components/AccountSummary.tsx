@@ -1,5 +1,11 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import TransactionTable from "./TransactionTable";
+
+enum Algorithm {
+  HAIRCUT = "haircut",
+  FIFO = "fifo",
+  POISON = "poison",
+}
 
 type AccountSummaryProps = {
   account: Account;
@@ -7,6 +13,27 @@ type AccountSummaryProps = {
 };
 
 const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
+  const API_URL = "http://127.0.0.1:8000"; // TODO Make global!
+
+  const [haircut, setHaircut] = useState<HaircutResult>();
+
+  const fetchTaint = async (algorithm: Algorithm) => {
+    const response = await fetch(
+      `${API_URL}/taint/${algorithm}/${account.address}`,
+      {
+        method: "GET",
+      }
+    );
+
+    return response.json();
+  };
+
+  useEffect(() => {
+    fetchTaint(Algorithm.HAIRCUT).then((haircutResult: HaircutResult) =>
+      setHaircut(haircutResult ?? undefined)
+    );
+  }, []);
+
   return (
     <div className="mt-3 p-3 text-tornado-green">
       <p>
@@ -20,7 +47,15 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
         {account.risk_level ?? "None"}
         <br />
         <span className="font-bold">Haircut:</span>{" "}
-        {account.risk_level ?? "None"}
+        {haircut ? (
+          haircut.taint == 1 ? (
+            <span className="font-bold text-red-600">TRUE</span>
+          ) : (
+            "FALSE"
+          )
+        ) : (
+          "None"
+        )}
         <br />
         <span className="font-bold">FIFO:</span> {account.risk_level ?? "None"}
         <br />
