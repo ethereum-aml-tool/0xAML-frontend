@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import logo from "../assets/images/tornado-main.svg"; // TODO REMOVE THIS, cool but stolen from Tornado Cash
+import AccountSummary from "./components/AccountSummary";
 import InputField from "./components/InputField";
 import TransactionTable from "./components/TransactionTable";
 
@@ -53,7 +54,7 @@ function App() {
   );
 
   return (
-    <div className="text-center selection:bg-green-900 font-mono">
+    <div className="text-center font-mono selection:bg-green-900">
       <header className="flex min-h-screen flex-col items-center justify-center bg-tornado-dark text-white">
         <img
           src={logo}
@@ -69,15 +70,15 @@ function App() {
           "
           }
         </style>
-        <p className="font-sans mt-14 bg-gradient-to-r from-tornado-green to-green-600 bg-clip-text text-4xl font-black text-transparent selection:bg-transparent">
+        <p className="mt-14 bg-gradient-to-r from-tornado-green to-green-600 bg-clip-text font-sans text-4xl font-black text-transparent selection:bg-transparent">
           0x<span className="italic">AML</span>
         </p>
-        <p className="font-sans bg-gradient-to-r from-tornado-green to-green-600 bg-clip-text text-2xl font-black text-transparent selection:bg-transparent">
+        <p className="bg-gradient-to-r from-tornado-green to-green-600 bg-clip-text font-sans text-2xl font-black text-transparent selection:bg-transparent">
           Money Laundering Detection
         </p>
         <div className="mt-4 w-96 max-w-full px-5">
           <InputField
-            onEnterPressed={(e) => {
+            onEnterPressed={(e) => { // TODO Clean this up...
               const address = e.currentTarget.value;
               setAccount(undefined);
               setTransactions(undefined);
@@ -101,29 +102,7 @@ function App() {
             <div></div>
           </div>
         )}
-        {account && (
-          <div className="mt-3 p-3 text-tornado-green">
-            <p>
-              <span className="font-bold italic text-lg">
-                [{"0x" + account.address.substring(2).toLocaleUpperCase()}]
-              </span>{" "}
-              <br />
-              <span className="font-bold">Balance:</span>{" "}
-              {account.balance ?? "? ETH"}
-              <br />
-              <span className="font-bold">Risk Estimation:</span>{" "}
-              {account.risk_level ?? "None"}
-            </p>
-            {transactions && transactions.length > 0 && (
-              <div className="mt-4">
-                <h3 className="mb-2 text-xl font-bold text-left">
-                  Flagged Transactions:
-                </h3>
-                <TransactionTable transactions={transactions} />
-              </div>
-            )}
-          </div>
-        )}
+        {account && <AccountSummary account={account} transactions={transactions ?? undefined} />}
         <p className="mt-3 flex gap-3 text-center text-[#8d96a7]">
           <FooterLink
             link="https://github.com/ethereum-aml-tool"
