@@ -2,11 +2,9 @@ import { FC, useState } from "react";
 import logo from "../assets/images/tornado-main.svg"; // TODO REMOVE THIS, cool but stolen from Tornado Cash
 import AccountSummary from "./components/AccountSummary";
 import InputField from "./components/InputField";
-import TransactionTable from "./components/TransactionTable";
+import { API_URL } from "./constants";
 
 function App() {
-  const API_URL = "http://127.0.0.1:8000";
-
   const [account, setAccount] = useState<Account>();
   const [transactions, setTransactions] = useState<Transaction[]>();
   const [isLoading, setIsLoading] = useState(false);
@@ -78,7 +76,8 @@ function App() {
         </p>
         <div className="mt-4 w-96 max-w-full px-5">
           <InputField
-            onEnterPressed={(e) => { // TODO Clean this up...
+            onEnterPressed={(e) => {
+              // TODO Clean this up...
               const address = e.currentTarget.value;
               setAccount(undefined);
               setTransactions(undefined);
@@ -102,7 +101,12 @@ function App() {
             <div></div>
           </div>
         )}
-        {account && <AccountSummary account={account} transactions={transactions ?? undefined} />}
+        {account && (
+          <AccountSummary
+            account={account}
+            transactions={transactions ?? undefined}
+          />
+        )}
         <p className="mt-3 flex gap-3 text-center text-[#8d96a7]">
           <FooterLink
             link="https://github.com/ethereum-aml-tool"

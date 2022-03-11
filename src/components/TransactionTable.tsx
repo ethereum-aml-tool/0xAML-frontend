@@ -1,12 +1,11 @@
 import { FC } from "react";
+import { EXPLORER_URL } from "../constants";
 
 type TransactionBoxProps = {
   transactions: Transaction[];
 };
 
 const TransactionTable: FC<TransactionBoxProps> = ({ transactions }) => {
-  const EXPLORER_URL = "https://etherscan.io";
-
   const TableHeaderCell: FC<{ data: string }> = ({ data }) => (
     <th className=" border-tornado-green p-2">{data}</th>
   );
