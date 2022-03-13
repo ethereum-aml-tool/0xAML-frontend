@@ -34,7 +34,7 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
   }, []);
 
   return (
-    <div className="mt-3 p-3 text-tornado-green">
+    <div className="mt-1 p-3 text-tornado-green">
       <p>
         <span className="text-lg font-bold italic">
           <a

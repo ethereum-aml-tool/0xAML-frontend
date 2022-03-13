@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import logo from "../assets/images/tornado-main.svg"; // TODO REMOVE THIS, cool but stolen from Tornado Cash
 import AccountSummary from "./components/AccountSummary";
 import InputField from "./components/InputField";
-import { API_URL } from "./constants";
+import { API_URL, APP_NAME } from "./constants";
 
 function App() {
   const [account, setAccount] = useState<Account>();
@@ -68,11 +68,11 @@ function App() {
           "
           }
         </style>
-        <p className="mt-14 bg-gradient-to-r from-tornado-green to-green-600 bg-clip-text font-sans text-4xl font-black text-transparent selection:bg-transparent">
-          0x<span className="italic">AML</span>
+        <p className="mt-14 bg-gradient-to-r from-tornado-green to-green-600 bg-clip-text text-5xl font-black text-transparent selection:bg-transparent">
+          <span className="font-mono italic">{APP_NAME.toUpperCase()}</span>
         </p>
-        <p className="bg-gradient-to-r from-tornado-green to-green-600 bg-clip-text font-sans text-2xl font-black text-transparent selection:bg-transparent">
-          Money Laundering Detection
+        <p className="bg-gradient-to-r from-tornado-green to-green-600 bg-clip-text text-xl font-black text-transparent selection:bg-transparent">
+          <span className="font-mono">Money Laundering Detection</span>
         </p>
         <div className="mt-4 w-96 max-w-full px-5">
           <InputField
@@ -107,7 +107,7 @@ function App() {
             transactions={transactions ?? undefined}
           />
         )}
-        <p className="mt-3 flex gap-3 text-center text-[#8d96a7]">
+        <p className="mt-4 flex gap-3 text-center text-[#8d96a7]">
           <FooterLink
             link="https://github.com/ethereum-aml-tool"
             text="GitHub"
