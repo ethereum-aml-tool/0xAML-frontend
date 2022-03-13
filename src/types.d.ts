@@ -18,3 +18,18 @@ type HaircutResult = {
     balance: number;
     taint: number;
 };
+
+type FifoResult = {
+  address: string;
+  queue: number;
+};
+
+type PoisonResult = {
+  address: string;
+  blacklisted: boolean;
+};
+
+type SeniorityResult = {
+  address: string;
+  tainted_balance: number;
+};

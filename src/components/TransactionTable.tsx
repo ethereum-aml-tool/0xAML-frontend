@@ -5,6 +5,7 @@ type TransactionBoxProps = {
   transactions: Transaction[];
 };
 
+// DEMO ADDRESS: 0xCb7f6EF9F98815A4E2af44B33d35969B8C10c8Cd
 const TransactionTable: FC<TransactionBoxProps> = ({ transactions }) => {
   const TableHeaderCell: FC<{ data: string }> = ({ data }) => (
     <th className=" border-tornado-green p-2">{data}</th>

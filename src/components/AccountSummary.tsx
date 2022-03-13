@@ -6,6 +6,7 @@ enum Algorithm {
   HAIRCUT = "haircut",
   FIFO = "fifo",
   POISON = "poison",
+  SENIORITY = "seniority",
 }
 
 type AccountSummaryProps = {
@@ -15,6 +16,9 @@ type AccountSummaryProps = {
 
 const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
   const [haircut, setHaircut] = useState<HaircutResult>();
+  const [fifo, setFifo] = useState<FifoResult>();
+  const [poison, setPoison] = useState<PoisonResult>();
+  const [seniority, setSeniority] = useState<SeniorityResult>();
 
   const fetchTaint = async (algorithm: Algorithm) => {
     const response = await fetch(
@@ -30,6 +34,15 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
   useEffect(() => {
     fetchTaint(Algorithm.HAIRCUT).then((haircutResult: HaircutResult) =>
       setHaircut(haircutResult ?? undefined)
+    );
+    fetchTaint(Algorithm.FIFO).then((fifoResult: FifoResult) =>
+      setFifo(fifoResult ?? undefined)
+    );
+    fetchTaint(Algorithm.POISON).then((poisonResult: PoisonResult) =>
+      setPoison(poisonResult ?? undefined)
+    );
+    fetchTaint(Algorithm.SENIORITY).then((seniorityResult: SeniorityResult) =>
+      setSeniority(seniorityResult ?? undefined)
     );
   }, []);
 
@@ -49,7 +62,7 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
         <span className="font-bold">Balance:</span> {account.balance ?? "? ETH"}
         <br />
         <span className="font-bold">Risk Estimation:</span>{" "}
-        {account.risk_level ?? "None"}
+        {account.risk_level ?? "TO BE IMPLEMENTED"}
         <br />
         <span className="font-bold">Haircut:</span>{" "}
         {haircut ? (
@@ -67,7 +80,28 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
         <span className="font-bold">FIFO:</span> {account.risk_level ?? "None"}
         <br />
         <span className="font-bold">Poison:</span>{" "}
-        {account.risk_level ?? "None"}
+        {poison ? (
+          poison.blacklisted == true ? (
+            <span className="font-bold text-red-600">TRUE</span>
+          ) : (
+            "FALSE"
+          )
+        ) : (
+          "None"
+        )}
+        <br />
+        <span className="font-bold">Seniority:</span>{" "}
+        {seniority ? (
+          seniority.tainted_balance != 0 ? (
+            <span className="font-bold text-red-600">
+              TRUE | {seniority.tainted_balance.toFixed(3)}
+            </span>
+          ) : (
+            "FALSE"
+          )
+        ) : (
+          "None"
+        )}
       </p>
       {transactions && transactions.length > 0 && (
         <div className="mt-4">
