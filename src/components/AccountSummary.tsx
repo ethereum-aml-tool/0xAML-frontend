@@ -15,6 +15,7 @@ type AccountSummaryProps = {
 };
 
 const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
+  const [balance, setBalance] = useState<EtherscanBalance>();
   const [haircut, setHaircut] = useState<HaircutResult>();
   const [fifo, setFifo] = useState<FifoResult>();
   const [poison, setPoison] = useState<PoisonResult>();
@@ -31,7 +32,22 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
     return response.json();
   };
 
+  const fetchBalance = async () => {
+    const response = await fetch(
+      `${API_URL}/etherscan/balance/${account.address}`,
+      {
+        method: "GET",
+      }
+    );
+
+    return response.json();
+  }
+
   useEffect(() => {
+    // Fetch balance from Etherscan
+    fetchBalance().then((balance: EtherscanBalance) => setBalance(balance ?? undefined));
+
+    // Fetch results from blacklisting algorithms
     fetchTaint(Algorithm.HAIRCUT).then((haircutResult: HaircutResult) =>
       setHaircut(haircutResult ?? undefined)
     );
@@ -59,7 +75,7 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
           </a>
         </span>{" "}
         <br />
-        <span className="font-bold">Balance:</span> {account.balance ?? "? ETH"}
+        <span className="font-bold">Balance:</span> {balance?.result.toFixed(5) + " Ether" ?? "? ETH"}
         <br />
         <span className="font-bold">Risk Estimation:</span>{" "}
         {account.risk_level ?? "TO BE IMPLEMENTED"}

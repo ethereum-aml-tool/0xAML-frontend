@@ -13,6 +13,12 @@ type Transaction = {
   to_address: string;
 };
 
+type EtherscanBalance = {
+  status: string;
+  message: string;
+  result: number;
+};
+
 type HaircutResult = {
     address: string;
     balance: number;
