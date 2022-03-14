@@ -77,7 +77,16 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
           "None"
         )}
         <br />
-        <span className="font-bold">FIFO:</span> {account.risk_level ?? "None"}
+        <span className="font-bold">FIFO:</span>{" "}
+        {fifo ? (
+          fifo.tainted != 0 ? (
+            <span className="font-bold text-red-600">TRUE | {fifo.tainted.toFixed(3)}</span>
+          ) : (
+            "FALSE"
+          )
+        ) : (
+          "None"
+        )}
         <br />
         <span className="font-bold">Poison:</span>{" "}
         {poison ? (

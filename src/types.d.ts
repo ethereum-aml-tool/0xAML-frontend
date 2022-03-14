@@ -21,7 +21,8 @@ type HaircutResult = {
 
 type FifoResult = {
   address: string;
-  queue: number;
+  tainted: number;
+  untainted: number;
 };
 
 type PoisonResult = {
