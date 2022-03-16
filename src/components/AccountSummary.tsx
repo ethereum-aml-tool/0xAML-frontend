@@ -41,11 +41,13 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
     );
 
     return response.json();
-  }
+  };
 
   useEffect(() => {
     // Fetch balance from Etherscan
-    fetchBalance().then((balance: EtherscanBalance) => setBalance(balance ?? undefined));
+    fetchBalance().then((balance: EtherscanBalance) =>
+      setBalance(balance ?? undefined)
+    );
 
     // Fetch results from blacklisting algorithms
     fetchTaint(Algorithm.HAIRCUT).then((haircutResult: HaircutResult) =>
@@ -75,7 +77,8 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
           </a>
         </span>{" "}
         <br />
-        <span className="font-bold">Balance:</span> {balance?.result.toFixed(5) + " Ether" ?? "? ETH"}
+        <span className="font-bold">Balance:</span>{" "}
+        {balance ? balance?.result.toFixed(5) + " Ether" : "? ETH"}
         <br />
         <span className="font-bold">Risk Estimation:</span>{" "}
         {account.risk_level ?? "TO BE IMPLEMENTED"}
@@ -96,7 +99,9 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
         <span className="font-bold">FIFO:</span>{" "}
         {fifo ? (
           fifo.tainted != 0 ? (
-            <span className="font-bold text-red-600">TRUE | {fifo.tainted.toFixed(3)}</span>
+            <span className="font-bold text-red-600">
+              TRUE | {fifo.tainted.toFixed(3)}
+            </span>
           ) : (
             "FALSE"
           )
