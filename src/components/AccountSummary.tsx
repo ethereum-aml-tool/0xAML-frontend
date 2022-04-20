@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import TransactionTable from "./TransactionTable";
 import { API_URL, EXPLORER_URL } from "../constants";
-import GraphView from "./GraphView";
+import GraphView from "./GraphView/GraphView";
 
 enum Algorithm {
   HAIRCUT = "haircut",
@@ -142,7 +142,7 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
           <TransactionTable transactions={transactions} />
         </div>
       )}
-      <GraphView addresses={['0xPONTUS, 0xMAX']} />
+      <GraphView graph={JSON.parse('{"nodes": ["0x240d06c7abfcef26a9c17c89e1d5a9d06d9c9119", "0x3628fb6df176319797d7e7017a8baee3e8174fb4", "0xb4555e26e72253af19114016d5f0dc1cfbc5c7db"],"edges": [{"from": 0, "to": 2}, {"from": 1, "to": 2}]}')} />
     </div>
   );
 };

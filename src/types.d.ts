@@ -13,6 +13,14 @@ type Transaction = {
   to_address: string;
 };
 
+type DARGraph = {
+  nodes: string[];
+  edges: {
+    from: number;
+    to: number;
+  }[];
+}
+
 type EtherscanBalance = {
   status: string;
   message: string;
