@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import TransactionTable from "./TransactionTable";
 import { API_URL, EXPLORER_URL } from "../constants";
+import GraphView from "./GraphView";
 
 enum Algorithm {
   HAIRCUT = "haircut",
@@ -141,6 +142,7 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
           <TransactionTable transactions={transactions} />
         </div>
       )}
+      <GraphView addresses={['0xPONTUS, 0xMAX']} />
     </div>
   );
 };
