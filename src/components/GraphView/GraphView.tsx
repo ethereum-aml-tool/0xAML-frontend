@@ -1,8 +1,8 @@
 import { FC } from "react";
 import ReactFlow, { Node, Edge, Position } from "react-flow-renderer";
-import dagre from 'dagre';
+import dagre from "dagre";
 
-import './GraphView.css';
+import "./GraphView.css";
 
 /*
 {
@@ -42,10 +42,12 @@ const GraphView: FC<GraphViewProps> = ({ graph }) => {
     }
     for (let i = 0; i < graph.edges.length; i++) {
       edges.push({
-        id: `e${graph.edges[i].from.toString()}-${graph.edges[i].to.toString()}`,
+        id: `e${graph.edges[i].from.toString()}-${graph.edges[
+          i
+        ].to.toString()}`,
         source: graph.edges[i].from.toString(),
         target: graph.edges[i].to.toString(),
-        animated: true
+        animated: true,
       });
     }
 
