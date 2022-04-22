@@ -1,6 +1,7 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import ReactFlow, { Node, Edge, Position } from "react-flow-renderer";
 import dagre from "dagre";
+import { API_URL, EXPLORER_URL } from "../../constants";
 
 import "./GraphView.css";
 
@@ -12,10 +13,21 @@ import "./GraphView.css";
 */
 
 type GraphViewProps = {
-  graph: DARGraph;
+  address: string;
 };
 
-const GraphView: FC<GraphViewProps> = ({ graph }) => {
+const GraphView: FC<GraphViewProps> = ({ address }) => {
+  const fetchGraph = async (address: string) => {
+    const response = await fetch(
+      `${API_URL}/cluster/get-dar/?address=${address}`,
+      {
+        method: "GET",
+      }
+    );
+
+    return response.json();
+  };
+
   const graphToReactFlow = (graph: DARGraph) => {
     const nodes: Node[] = [];
     const edges: Edge[] = [];
@@ -89,7 +101,16 @@ const GraphView: FC<GraphViewProps> = ({ graph }) => {
     return { nodes, edges };
   };
 
-  const { nodes, edges } = graphToReactFlow(graph);
+  const [nodes, setNodes] = useState<Node[]>([]);
+  const [edges, setEdges] = useState<Edge[]>([]);
+
+  useEffect(() => {
+    fetchGraph(address).then((graph: DARGraph) => {
+      const { nodes, edges } = graphToReactFlow(graph);
+      setNodes(nodes);
+      setEdges(edges);
+    });
+  }, []);
 
   return (
     <div className="h-80 w-96 rounded-sm border-2 border-solid border-tornado-green">
