@@ -1,5 +1,10 @@
 import { FC, useEffect, useState } from "react";
-import ReactFlow, { Node, Edge, Position } from "react-flow-renderer";
+import ReactFlow, {
+  Node,
+  Edge,
+  Position,
+  MarkerType,
+} from "react-flow-renderer";
 import dagre from "dagre";
 import { API_URL, EXPLORER_URL } from "../../constants";
 
@@ -59,13 +64,23 @@ const GraphView: FC<GraphViewProps> = ({ address }) => {
         ].to.toString()}`,
         source: graph.edges[i].from.toString(),
         target: graph.edges[i].to.toString(),
+        markerEnd: {
+          type: MarkerType.ArrowClosed,
+        },
         animated: true,
       });
     }
 
-    console.log(nodes);
-    console.log(edges);
+    // Fix node types, target is deposit address
+    edges.forEach((edge) => {
+      nodes[parseInt(edge.source)].type = "input";
+      nodes[parseInt(edge.target)].type = "output";
 
+      // change text color of deposit addresses
+      nodes[parseInt(edge.target)].style = {color: "blue"};
+    });
+
+    // Graph layouting with Dagre
     const dagreGraph = new dagre.graphlib.Graph();
     dagreGraph.setDefaultEdgeLabel(() => ({}));
 
@@ -113,8 +128,16 @@ const GraphView: FC<GraphViewProps> = ({ address }) => {
   }, []);
 
   return (
-    <div className="h-80 w-96 rounded-sm border-2 border-solid border-tornado-green">
-      <ReactFlow nodes={nodes} edges={edges} fitView />
+    <div className="">
+      {nodes.length > 0 && (
+        <div className="mt-2 flex flex-col items-center justify-center">
+          <p className="text-lg font-bold">DAR (Deposit Address Reuse)</p>
+          <p className="italic"><span className="text-blue-600">blue</span> = deposit address</p>
+          <div className="mt-1 h-80 w-[95vw] rounded-sm border border-solid border-tornado-green">
+            <ReactFlow nodes={nodes} edges={edges} fitView />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

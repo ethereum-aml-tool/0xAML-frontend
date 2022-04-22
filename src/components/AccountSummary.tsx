@@ -142,8 +142,7 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
           <TransactionTable transactions={transactions} />
         </div>
       )}
-      <div className="mt-2">
-        <p className="text-lg font-bold">DAR (Deposit Address Reuse)</p>
+      <div>
         <GraphView address={account.address} />
       </div>
     </div>
