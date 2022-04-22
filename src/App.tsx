@@ -107,7 +107,7 @@ function App() {
             transactions={transactions ?? undefined}
           />
         )}
-        <p className="mt-4 flex gap-3 text-center text-[#8d96a7]">
+        <p className="my-4 flex gap-3 text-center text-[#8d96a7]">
           <FooterLink
             link="https://github.com/ethereum-aml-tool"
             text="GitHub"
