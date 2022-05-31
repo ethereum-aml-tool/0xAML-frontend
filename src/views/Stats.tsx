@@ -78,6 +78,7 @@ const DataGraph: FC<{
               strokeWidth={2}
               dot={false}
               activeDot={{ r: 5 }}
+              animationDuration={3000}
             />
             <Line
               data={poisonFlagged}
@@ -88,6 +89,7 @@ const DataGraph: FC<{
               strokeWidth={2}
               dot={false}
               activeDot={{ r: 5 }}
+              animationDuration={3000}
             />
             <Line
               data={haircutTornado}
@@ -98,6 +100,7 @@ const DataGraph: FC<{
               strokeWidth={3}
               dot={false}
               activeDot={{ r: 5 }}
+              animationDuration={3000}
             />
             <Line
               data={haircutFlagged}
@@ -108,6 +111,7 @@ const DataGraph: FC<{
               strokeWidth={2}
               dot={false}
               activeDot={{ r: 5 }}
+              animationDuration={3000}
             />
             <Line
               data={seniorityTornado}
@@ -118,16 +122,18 @@ const DataGraph: FC<{
               strokeWidth={2}
               dot={false}
               activeDot={{ r: 5 }}
+              animationDuration={3000}
             />
             <Line
               data={seniorityFlagged}
               type="monotone"
               dataKey="n_blacklisted"
               name="Seniority (Flagged)"
-              stroke="#F2E1C1"
+              stroke="#EB5353"
               strokeWidth={2}
               dot={false}
               activeDot={{ r: 5 }}
+              animationDuration={3000}
             />
           </LineChart>
         </ResponsiveContainer>
