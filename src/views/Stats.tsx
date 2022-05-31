@@ -34,7 +34,7 @@ const fetchCsv = async (dataset: Dataset): Promise<DSVParsedArray<any>> => {
       rows_processed: d.rows_processed ? +d.rows_processed : null,
       n_blacklisted: d.n_blacklisted ? +d.n_blacklisted : null,
       max_block: d.max_block ? +d.max_block : null,
-      processed_after: d.processed_after,
+      processed_after: d.processed_after ? (parseInt(d.processed_after?.split(" ")[2].split(":")[0]) * 60 + parseInt(d.processed_after?.split(" ")[2].split(":")[1])) / 60 : null,
       ram_usage_gb: d.ram_usage_gb ? +d.ram_usage_gb : null,
     };
   });
@@ -48,10 +48,14 @@ const DataGraph: FC<{
   seniorityTornado: DSVParsedArray<any>;
   seniorityFlagged: DSVParsedArray<any>;
   title: string;
-}> = ({ poisonTornado, poisonFlagged, haircutTornado, haircutFlagged, seniorityTornado, seniorityFlagged, title }) => {
+  xKey: string;
+  yKey: string;
+  xDomain: [number, number];
+  yDomain: [number, number];
+}> = ({ poisonTornado, poisonFlagged, haircutTornado, haircutFlagged, seniorityTornado, seniorityFlagged, title, xKey, yKey, xDomain, yDomain }) => {
   return (
     <div className="flex min-w-full flex-col items-center justify-center">
-      <p>{title}</p>
+      <p className="mt-3 text-lg">{title}</p>
       <div className="h-96 w-2/3">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
@@ -65,14 +69,14 @@ const DataGraph: FC<{
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="max_block" type="number" domain={[0, 16000000]} />
-            <YAxis type="number" domain={[0, 160000000]} />
+            <XAxis dataKey={xKey} type="number" domain={xDomain} />
+            <YAxis type="number" domain={yDomain} />
             <Tooltip />
             <Legend />
             <Line
               data={poisonTornado}
               type="monotone"
-              dataKey="n_blacklisted"
+              dataKey={yKey}
               name="Poison (Tornado)"
               stroke="#8884d8"
               strokeWidth={2}
@@ -83,7 +87,7 @@ const DataGraph: FC<{
             <Line
               data={poisonFlagged}
               type="monotone"
-              dataKey="n_blacklisted"
+              dataKey={yKey}
               name="Poison (Flagged)"
               stroke="#1a9c50"
               strokeWidth={2}
@@ -94,7 +98,7 @@ const DataGraph: FC<{
             <Line
               data={haircutTornado}
               type="monotone"
-              dataKey="n_blacklisted"
+              dataKey={yKey}
               name="Haircut (Tornado)"
               stroke="#242F9B"
               strokeWidth={3}
@@ -105,7 +109,7 @@ const DataGraph: FC<{
             <Line
               data={haircutFlagged}
               type="monotone"
-              dataKey="n_blacklisted"
+              dataKey={yKey}
               name="Haircut (Flagged)"
               stroke="#B97A95"
               strokeWidth={2}
@@ -116,7 +120,7 @@ const DataGraph: FC<{
             <Line
               data={seniorityTornado}
               type="monotone"
-              dataKey="n_blacklisted"
+              dataKey={yKey}
               name="Seniority (Tornado)"
               stroke="#F6AE99"
               strokeWidth={2}
@@ -127,7 +131,7 @@ const DataGraph: FC<{
             <Line
               data={seniorityFlagged}
               type="monotone"
-              dataKey="n_blacklisted"
+              dataKey={yKey}
               name="Seniority (Flagged)"
               stroke="#EB5353"
               strokeWidth={2}
@@ -175,7 +179,6 @@ function Stats() {
 
   return (
     <div className="flex min-w-full flex-col items-center justify-center">
-      <h1 className="mt-2 text-3xl">Stats</h1>
       {/* <div className="flex flex-col items-center justify-center">
         <img
           src={blacklistedGraph}
@@ -193,17 +196,55 @@ function Stats() {
           className="mb-3"
         />
       </div> */}
-      {poisonTornado && poisonFlagged && haircutTornado && haircutFlagged && seniorityTornado && seniorityFlagged &&(
-        <DataGraph
-          poisonTornado={poisonTornado}
-          poisonFlagged={poisonFlagged}
-          haircutFlagged={haircutFlagged}
-          haircutTornado={haircutTornado}
-          seniorityFlagged={seniorityFlagged}
-          seniorityTornado={seniorityTornado}
-          title={"# of blacklisted addresses"}
-        />
-      )}
+      {poisonTornado &&
+        poisonFlagged &&
+        haircutTornado &&
+        haircutFlagged &&
+        seniorityTornado &&
+        seniorityFlagged && (
+          <div className="flex min-w-full flex-col items-center justify-center">
+            <h1 className="mt-2 text-3xl">Stats</h1>
+            <DataGraph
+              poisonTornado={poisonTornado}
+              poisonFlagged={poisonFlagged}
+              haircutFlagged={haircutFlagged}
+              haircutTornado={haircutTornado}
+              seniorityFlagged={seniorityFlagged}
+              seniorityTornado={seniorityTornado}
+              title={"# of blacklisted addresses"}
+              xKey={"max_block"}
+              yKey={"n_blacklisted"}
+              xDomain={[0, 16000000]}
+              yDomain={[0, 160000000]}
+            />
+            <DataGraph
+              poisonTornado={poisonTornado}
+              poisonFlagged={poisonFlagged}
+              haircutFlagged={haircutFlagged}
+              haircutTornado={haircutTornado}
+              seniorityFlagged={seniorityFlagged}
+              seniorityTornado={seniorityTornado}
+              title={"RAM usage (GB)"}
+              xKey={"max_block"}
+              yKey={"ram_usage_gb"}
+              xDomain={[0, 16000000]}
+              yDomain={[0, 50]}
+            />
+            <DataGraph
+              poisonTornado={poisonTornado}
+              poisonFlagged={poisonFlagged}
+              haircutFlagged={haircutFlagged}
+              haircutTornado={haircutTornado}
+              seniorityFlagged={seniorityFlagged}
+              seniorityTornado={seniorityTornado}
+              title={"Time to reach block (hours)"}
+              xKey={"max_block"}
+              yKey={"processed_after"}
+              xDomain={[0, 16000000]}
+              yDomain={[0, 12]}
+            />
+          </div>
+        )}
     </div>
   );
 }
