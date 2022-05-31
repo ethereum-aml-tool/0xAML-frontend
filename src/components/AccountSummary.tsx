@@ -86,9 +86,9 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
         <br />
         <span className="font-bold">Haircut:</span>{" "}
         {haircut ? (
-          haircut.taint == 1 ? (
+          haircut.taint != 0 ? (
             <span className="font-bold text-red-600">
-              TRUE | {haircut.balance.toFixed(3)}
+              TRUE | {haircut.taint.toFixed(3)} Ether
             </span>
           ) : (
             "FALSE"
@@ -101,7 +101,7 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
         {fifo ? (
           fifo.tainted != 0 ? (
             <span className="font-bold text-red-600">
-              TRUE | {fifo.tainted.toFixed(3)}
+              TRUE | {fifo.tainted.toFixed(3)} Ether
             </span>
           ) : (
             "FALSE"
@@ -125,7 +125,7 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
         {seniority ? (
           seniority.tainted_balance != 0 ? (
             <span className="font-bold text-red-600">
-              TRUE | {seniority.tainted_balance.toFixed(3)}
+              TRUE | {seniority.tainted_balance.toFixed(3)} Ether
             </span>
           ) : (
             "FALSE"
