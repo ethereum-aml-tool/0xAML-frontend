@@ -14,13 +14,13 @@ import blacklistedGraph from "../../assets/images/graphs/blacklisted.png";
 import ramGraph from "../../assets/images/graphs/ram.png";
 import timeGraph from "../../assets/images/graphs/time.png";
 
-let dataUrl =
-  location.hostname === "localhost"
-    ? "http://127.0.0.1:5500/assets/csv/poison-tornado-rundata.csv"
-    : "https://pastebin.com/raw/9i26cZXc";
-let data = await csv(
-  dataUrl,
-  (d) => {
+const fetchCsv = async () => {
+  let dataUrl =
+    location.hostname === "localhost"
+      ? "http://127.0.0.1:5500/assets/csv/poison-tornado-rundata.csv"
+      : "https://pastebin.com/raw/9i26cZXc";
+
+  return await csv(dataUrl, (d) => {
     return {
       chunk: d.chunk ? +d.chunk : null,
       rows_processed: d.rows_processed ? +d.rows_processed : null,
@@ -29,10 +29,13 @@ let data = await csv(
       processed_after: d.processed_after,
       ram_usage_gb: d.ram_usage_gb ? +d.ram_usage_gb : null,
     };
-  }
-);
+  });
+};
 
-const DataGraph: FC<{ data: DSVParsedArray<any>; title: string }> = ({data, title}) => {
+const DataGraph: FC<{ data: DSVParsedArray<any>; title: string }> = ({
+  data,
+  title,
+}) => {
   return (
     <div className="flex min-w-full flex-col items-center justify-center">
       <p>{title}</p>
@@ -74,9 +77,11 @@ const DataGraph: FC<{ data: DSVParsedArray<any>; title: string }> = ({data, titl
 };
 
 function Stats() {
+  let data = fetchCsv();
+
   return (
     <div className="flex min-w-full flex-col items-center justify-center">
-      <h1 className="text-3xl mt-2">Stats</h1>
+      <h1 className="mt-2 text-3xl">Stats</h1>
       <div className="flex flex-col items-center justify-center">
         <img
           src={blacklistedGraph}
