@@ -18,13 +18,13 @@ type AccountSummaryProps = {
 const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
   const [balance, setBalance] = useState<EtherscanBalance>();
   const [haircut, setHaircut] = useState<HaircutResult>();
-  const [fifo, setFifo] = useState<FifoResult>();
+  // const [fifo, setFifo] = useState<FifoResult>();
   const [poison, setPoison] = useState<PoisonResult>();
   const [seniority, setSeniority] = useState<SeniorityResult>();
 
   const fetchTaint = async (algorithm: Algorithm) => {
     const response = await fetch(
-      `${API_URL}/taint/${algorithm}/${account.address}`,
+      `${API_URL}/blacklist/${algorithm}/${account.address}`,
       {
         method: "GET",
       }
@@ -54,9 +54,9 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
     fetchTaint(Algorithm.HAIRCUT).then((haircutResult: HaircutResult) =>
       setHaircut(haircutResult ?? undefined)
     );
-    fetchTaint(Algorithm.FIFO).then((fifoResult: FifoResult) =>
-      setFifo(fifoResult ?? undefined)
-    );
+    // fetchTaint(Algorithm.FIFO).then((fifoResult: FifoResult) =>
+    //   setFifo(fifoResult ?? undefined)
+    // );
     fetchTaint(Algorithm.POISON).then((poisonResult: PoisonResult) =>
       setPoison(poisonResult ?? undefined)
     );
@@ -97,7 +97,7 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
           "None"
         )}
         <br />
-        <span className="font-bold">FIFO:</span>{" "}
+        {/* <span className="font-bold">FIFO:</span>{" "}
         {fifo ? (
           fifo.tainted != 0 ? (
             <span className="font-bold text-red-600">
@@ -109,10 +109,10 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
         ) : (
           "None"
         )}
-        <br />
+        <br /> */}
         <span className="font-bold">Poison:</span>{" "}
         {poison ? (
-          poison.blacklisted == true ? (
+          poison.flagged == true ? (
             <span className="font-bold text-red-600">TRUE</span>
           ) : (
             "FALSE"

@@ -41,7 +41,7 @@ type FifoResult = {
 
 type PoisonResult = {
   address: string;
-  blacklisted: boolean;
+  flagged: boolean;
 };
 
 type SeniorityResult = {
