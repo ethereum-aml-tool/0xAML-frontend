@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { FC, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/tornado-main.svg"; // TODO REMOVE THIS, cool but stolen from Tornado Cash
@@ -71,76 +72,83 @@ function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <img
-        src={logo}
-        className="animate-speed h-60 motion-safe:animate-spin"
-        alt="logo"
-      />
-      <style>
-        {
-          "\
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.7 }}
+      exit={{ opacity: 0 }}
+    >
+      <div className="flex flex-col items-center justify-center">
+        <img
+          src={logo}
+          className="animate-speed h-60 motion-safe:animate-spin"
+          alt="logo"
+        />
+        <style>
+          {
+            "\
             .animate-speed{\
               animation-duration:20s;\
             }\
           "
-        }
-      </style>
-      <p className="mt-14 bg-gradient-to-r from-tornado-green to-green-600 bg-clip-text text-5xl font-black text-transparent selection:bg-transparent">
-        <span className="font-mono italic">{APP_NAME.toUpperCase()}</span>
-      </p>
-      <p className="bg-gradient-to-r from-tornado-green to-green-600 bg-clip-text text-xl font-black text-transparent selection:bg-transparent">
-        <span className="font-mono">Money Laundering Detection</span>
-      </p>
-      <div className="mt-4 w-96 max-w-full px-5">
-        <InputField
-          onEnterPressed={(e) => {
-            // TODO Clean this up...
-            const address = e.currentTarget.value;
-            setAccount(undefined);
-            setTransactions(undefined);
-            setIsLoading(true);
-            fetchAccount(address).then((json) => {
-              setAccount(json);
-              setIsLoading(false);
+          }
+        </style>
+        <p className="mt-14 bg-gradient-to-r from-tornado-green to-green-600 bg-clip-text text-5xl font-black text-transparent selection:bg-transparent">
+          <span className="font-mono italic">{APP_NAME.toUpperCase()}</span>
+        </p>
+        <p className="bg-gradient-to-r from-tornado-green to-green-600 bg-clip-text text-xl font-black text-transparent selection:bg-transparent">
+          <span className="font-mono">Money Laundering Detection</span>
+        </p>
+        <div className="mt-4 w-96 max-w-full px-5">
+          <InputField
+            onEnterPressed={(e) => {
+              // TODO Clean this up...
+              const address = e.currentTarget.value;
+              setAccount(undefined);
+              setTransactions(undefined);
+              setIsLoading(true);
+              fetchAccount(address).then((json) => {
+                setAccount(json);
+                setIsLoading(false);
 
-              fetchTransactions(address).then((transactions) => {
-                setTransactions(transactions);
+                fetchTransactions(address).then((transactions) => {
+                  setTransactions(transactions);
+                });
               });
-            });
-          }}
-        />
-      </div>
-      {isLoading && (
-        <div className="loading-indicator">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
+            }}
+          />
         </div>
-      )}
-      {account && (
-        <AccountSummary
-          account={account}
-          transactions={transactions ?? undefined}
-        />
-      )}
-      <p className="my-4 flex gap-3 text-center text-[#8d96a7]">
-        <FooterLink
-          link="https://github.com/ethereum-aml-tool"
-          text="GitHub"
-          isRouterLink={false}
-        />
-        {" | "}
-        <FooterLink
-          link="https://vitejs.dev/guide/features.html"
-          text="What is this?"
-          isRouterLink={false}
-        />
-        {" | "}
-        <FooterLink link="stats" text="Statistics" isRouterLink={true} />
-      </p>
-    </div>
+        {isLoading && (
+          <div className="loading-indicator">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        )}
+        {account && (
+          <AccountSummary
+            account={account}
+            transactions={transactions ?? undefined}
+          />
+        )}
+        <p className="my-4 flex gap-3 text-center text-[#8d96a7]">
+          <FooterLink
+            link="https://github.com/ethereum-aml-tool"
+            text="GitHub"
+            isRouterLink={false}
+          />
+          {" | "}
+          <FooterLink
+            link="https://vitejs.dev/guide/features.html"
+            text="What is this?"
+            isRouterLink={false}
+          />
+          {" | "}
+          <FooterLink link="stats" text="Statistics" isRouterLink={true} />
+        </p>
+      </div>
+    </motion.div>
   );
 }
 

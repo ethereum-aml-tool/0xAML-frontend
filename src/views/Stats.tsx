@@ -13,6 +13,7 @@ import { FC, useEffect, useState } from "react";
 import blacklistedGraph from "../../assets/images/graphs/blacklisted.png";
 import ramGraph from "../../assets/images/graphs/ram.png";
 import timeGraph from "../../assets/images/graphs/time.png";
+import { motion } from "framer-motion";
 
 enum Dataset {
   PoisonTornado = "poison-tornado-rundata.csv",
@@ -178,8 +179,15 @@ function Stats() {
   }, []);
 
   return (
-    <div className="flex min-w-full flex-col items-center justify-center">
-      {/* <div className="flex flex-col items-center justify-center">
+    <motion.div
+      className="flex min-w-full flex-col items-center justify-center text-tornado-green"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.7 }}
+      exit={{ opacity: 0 }}
+    >
+      <div className="flex min-w-full flex-col items-center justify-center text-tornado-green">
+        {/* <div className="flex flex-col items-center justify-center">
         <img
           src={blacklistedGraph}
           alt="Number of blacklisted addresses per block"
@@ -196,56 +204,57 @@ function Stats() {
           className="mb-3"
         />
       </div> */}
-      {poisonTornado &&
-        poisonFlagged &&
-        haircutTornado &&
-        haircutFlagged &&
-        seniorityTornado &&
-        seniorityFlagged && (
-          <div className="flex min-w-full flex-col items-center justify-center">
-            <h1 className="mt-2 text-3xl">Stats</h1>
-            <DataGraph
-              poisonTornado={poisonTornado}
-              poisonFlagged={poisonFlagged}
-              haircutFlagged={haircutFlagged}
-              haircutTornado={haircutTornado}
-              seniorityFlagged={seniorityFlagged}
-              seniorityTornado={seniorityTornado}
-              title={"# of blacklisted addresses"}
-              xKey={"max_block"}
-              yKey={"n_blacklisted"}
-              xDomain={[0, 16000000]}
-              yDomain={[0, 160000000]}
-            />
-            <DataGraph
-              poisonTornado={poisonTornado}
-              poisonFlagged={poisonFlagged}
-              haircutFlagged={haircutFlagged}
-              haircutTornado={haircutTornado}
-              seniorityFlagged={seniorityFlagged}
-              seniorityTornado={seniorityTornado}
-              title={"RAM usage (GB)"}
-              xKey={"max_block"}
-              yKey={"ram_usage_gb"}
-              xDomain={[0, 16000000]}
-              yDomain={[0, 50]}
-            />
-            <DataGraph
-              poisonTornado={poisonTornado}
-              poisonFlagged={poisonFlagged}
-              haircutFlagged={haircutFlagged}
-              haircutTornado={haircutTornado}
-              seniorityFlagged={seniorityFlagged}
-              seniorityTornado={seniorityTornado}
-              title={"Time to reach block (hours)"}
-              xKey={"max_block"}
-              yKey={"processed_after"}
-              xDomain={[0, 16000000]}
-              yDomain={[0, 12]}
-            />
-          </div>
-        )}
-    </div>
+        {poisonTornado &&
+          poisonFlagged &&
+          haircutTornado &&
+          haircutFlagged &&
+          seniorityTornado &&
+          seniorityFlagged && (
+            <div className="flex min-w-full flex-col items-center justify-center">
+              <h1 className="mt-2 text-3xl">Stats</h1>
+              <DataGraph
+                poisonTornado={poisonTornado}
+                poisonFlagged={poisonFlagged}
+                haircutFlagged={haircutFlagged}
+                haircutTornado={haircutTornado}
+                seniorityFlagged={seniorityFlagged}
+                seniorityTornado={seniorityTornado}
+                title={"# of blacklisted addresses"}
+                xKey={"max_block"}
+                yKey={"n_blacklisted"}
+                xDomain={[0, 16000000]}
+                yDomain={[0, 160000000]}
+              />
+              <DataGraph
+                poisonTornado={poisonTornado}
+                poisonFlagged={poisonFlagged}
+                haircutFlagged={haircutFlagged}
+                haircutTornado={haircutTornado}
+                seniorityFlagged={seniorityFlagged}
+                seniorityTornado={seniorityTornado}
+                title={"RAM usage (GB)"}
+                xKey={"max_block"}
+                yKey={"ram_usage_gb"}
+                xDomain={[0, 16000000]}
+                yDomain={[0, 50]}
+              />
+              <DataGraph
+                poisonTornado={poisonTornado}
+                poisonFlagged={poisonFlagged}
+                haircutFlagged={haircutFlagged}
+                haircutTornado={haircutTornado}
+                seniorityFlagged={seniorityFlagged}
+                seniorityTornado={seniorityTornado}
+                title={"Time to reach block (hours)"}
+                xKey={"max_block"}
+                yKey={"processed_after"}
+                xDomain={[0, 16000000]}
+                yDomain={[0, 12]}
+              />
+            </div>
+          )}
+      </div>
+    </motion.div>
   );
 }
 
