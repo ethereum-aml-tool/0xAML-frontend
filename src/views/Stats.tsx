@@ -25,8 +25,8 @@ enum Dataset {
 const fetchCsv = async (dataset: Dataset): Promise<DSVParsedArray<any>> => {
   let dataUrl =
     location.hostname === "localhost"
-      ? `http://127.0.0.1:5500/assets/csv/${dataset}`
-      : "https://pastebin.com/raw/9i26cZXc";
+      ? `http://127.0.0.1:5500/public/csv/${dataset}`
+      : `/csv/${dataset}`;
 
   return csv(dataUrl, (d) => {
     return {
