@@ -24,12 +24,13 @@ enum Dataset {
   SeniorityFlagged = "seniority-flagged-rundata.csv",
 }
 const fetchCsv = async (dataset: Dataset): Promise<DSVParsedArray<any>> => {
-  let dataUrl =
-    location.hostname === "localhost"
-      ? `http://127.0.0.1:5500/public/csv/${dataset}`
-      : `/csv/${dataset}`;
+  let dataUrl = `/csv/${dataset}`;
 
   return csv(dataUrl, (d) => {
+    if (d.max_block !== undefined && parseInt(d.max_block) < 3000000) {
+      return null;
+    }
+
     return {
       chunk: d.chunk ? +d.chunk : null,
       rows_processed: d.rows_processed ? +d.rows_processed : null,
@@ -55,7 +56,7 @@ const DataGraph: FC<{
   yDomain: [number, number];
 }> = ({ poisonTornado, poisonFlagged, haircutTornado, haircutFlagged, seniorityTornado, seniorityFlagged, title, xKey, yKey, xDomain, yDomain }) => {
   return (
-    <div className="flex min-w-full flex-col items-center justify-center">
+    <div className="flex min-w-full 2xl:min-w-fit lg:w-2/3 flex-col items-center justify-center">
       <p className="mt-3 text-lg">{title}</p>
       <div className="h-96 w-2/3">
         <ResponsiveContainer width="100%" height="100%">
@@ -222,7 +223,7 @@ function Stats() {
                 title={"# of blacklisted addresses"}
                 xKey={"max_block"}
                 yKey={"n_blacklisted"}
-                xDomain={[0, 16000000]}
+                xDomain={[3000000, 15000000]}
                 yDomain={[0, 160000000]}
               />
               <DataGraph
@@ -235,7 +236,7 @@ function Stats() {
                 title={"RAM usage (GB)"}
                 xKey={"max_block"}
                 yKey={"ram_usage_gb"}
-                xDomain={[0, 16000000]}
+                xDomain={[3000000, 15000000]}
                 yDomain={[0, 50]}
               />
               <DataGraph
@@ -248,7 +249,7 @@ function Stats() {
                 title={"Time to reach block (hours)"}
                 xKey={"max_block"}
                 yKey={"processed_after"}
-                xDomain={[0, 16000000]}
+                xDomain={[3000000, 15000000]}
                 yDomain={[0, 12]}
               />
             </div>
