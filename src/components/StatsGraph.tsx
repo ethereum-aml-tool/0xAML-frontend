@@ -110,7 +110,7 @@ const DataGraph: FC<{
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey={xKey} type="number" domain={xDomain} />
             <YAxis type="number" domain={yDomain} />
-            <Tooltip />
+            {/* <Tooltip /> */}
             <Legend />
             {DataLine("Poison (Tornado)", "#8884d8", poisonTornado, yKey)}
             {DataLine("Poison (Flagged)", "#1a9c50", poisonFlagged, yKey)}
