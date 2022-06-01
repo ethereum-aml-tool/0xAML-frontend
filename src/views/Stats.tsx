@@ -1,152 +1,14 @@
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
-import { csv, DSVParsedArray, DSVRowArray } from "d3";
-import { FC, useEffect, useState } from "react";
+
+import { DSVParsedArray } from "d3";
+import { useEffect, useState } from "react";
+import DataGraph, {
+  Dataset,
+  fetchGraphDataset,
+} from "../components/StatsGraph";
 import blacklistedGraph from "../../assets/images/graphs/blacklisted.png";
 import ramGraph from "../../assets/images/graphs/ram.png";
 import timeGraph from "../../assets/images/graphs/time.png";
 import { motion } from "framer-motion";
-
-enum Dataset {
-  PoisonTornado = "poison-tornado-rundata.csv",
-  PoisonFlagged = "poison-flagged-rundata.csv",
-  HaircutTornado = "haircut-tornado-rundata.csv",
-  HaircutFlagged = "haircut-flagged-rundata.csv",
-  SeniorityTornado = "seniority-tornado-rundata.csv",
-  SeniorityFlagged = "seniority-flagged-rundata.csv",
-}
-const fetchCsv = async (dataset: Dataset): Promise<DSVParsedArray<any>> => {
-  let dataUrl = `/csv/${dataset}`;
-
-  return csv(dataUrl, (d) => {
-    if (d.max_block !== undefined && parseInt(d.max_block) < 3000000) {
-      return null;
-    }
-
-    return {
-      chunk: d.chunk ? +d.chunk : null,
-      rows_processed: d.rows_processed ? +d.rows_processed : null,
-      n_blacklisted: d.n_blacklisted ? +d.n_blacklisted : null,
-      max_block: d.max_block ? +d.max_block : null,
-      processed_after: d.processed_after ? (parseInt(d.processed_after?.split(" ")[2].split(":")[0]) * 60 + parseInt(d.processed_after?.split(" ")[2].split(":")[1])) / 60 : null,
-      ram_usage_gb: d.ram_usage_gb ? +d.ram_usage_gb : null,
-    };
-  });
-};
-
-const DataGraph: FC<{
-  poisonTornado: DSVParsedArray<any>;
-  poisonFlagged: DSVParsedArray<any>;
-  haircutTornado: DSVParsedArray<any>;
-  haircutFlagged: DSVParsedArray<any>;
-  seniorityTornado: DSVParsedArray<any>;
-  seniorityFlagged: DSVParsedArray<any>;
-  title: string;
-  xKey: string;
-  yKey: string;
-  xDomain: [number, number];
-  yDomain: [number, number];
-}> = ({ poisonTornado, poisonFlagged, haircutTornado, haircutFlagged, seniorityTornado, seniorityFlagged, title, xKey, yKey, xDomain, yDomain }) => {
-  return (
-    <div className="flex min-w-full 2xl:min-w-fit lg:w-2/3 flex-col items-center justify-center">
-      <p className="mt-3 text-lg">{title}</p>
-      <div className="h-96 w-2/3">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            width={500}
-            height={300}
-            margin={{
-              top: 5,
-              right: 40,
-              left: 40,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey={xKey} type="number" domain={xDomain} />
-            <YAxis type="number" domain={yDomain} />
-            <Tooltip />
-            <Legend />
-            <Line
-              data={poisonTornado}
-              type="monotone"
-              dataKey={yKey}
-              name="Poison (Tornado)"
-              stroke="#8884d8"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 5 }}
-              animationDuration={3000}
-            />
-            <Line
-              data={poisonFlagged}
-              type="monotone"
-              dataKey={yKey}
-              name="Poison (Flagged)"
-              stroke="#1a9c50"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 5 }}
-              animationDuration={3000}
-            />
-            <Line
-              data={haircutTornado}
-              type="monotone"
-              dataKey={yKey}
-              name="Haircut (Tornado)"
-              stroke="#242F9B"
-              strokeWidth={3}
-              dot={false}
-              activeDot={{ r: 5 }}
-              animationDuration={3000}
-            />
-            <Line
-              data={haircutFlagged}
-              type="monotone"
-              dataKey={yKey}
-              name="Haircut (Flagged)"
-              stroke="#B97A95"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 5 }}
-              animationDuration={3000}
-            />
-            <Line
-              data={seniorityTornado}
-              type="monotone"
-              dataKey={yKey}
-              name="Seniority (Tornado)"
-              stroke="#F6AE99"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 5 }}
-              animationDuration={3000}
-            />
-            <Line
-              data={seniorityFlagged}
-              type="monotone"
-              dataKey={yKey}
-              name="Seniority (Flagged)"
-              stroke="#EB5353"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 5 }}
-              animationDuration={3000}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  );
-};
 
 function Stats() {
   const [poisonTornado, setPoisonTornado] = useState<DSVParsedArray<any>>();
@@ -159,22 +21,23 @@ function Stats() {
     useState<DSVParsedArray<any>>();
 
   useEffect(() => {
-    fetchCsv(Dataset.PoisonTornado).then((data) => {
+    // Load all CSVs
+    fetchGraphDataset(Dataset.PoisonTornado).then((data) => {
       setPoisonTornado(data);
     });
-    fetchCsv(Dataset.PoisonFlagged).then((data) => {
+    fetchGraphDataset(Dataset.PoisonFlagged).then((data) => {
       setPoisonFlagged(data);
     });
-    fetchCsv(Dataset.HaircutTornado).then((data) => {
+    fetchGraphDataset(Dataset.HaircutTornado).then((data) => {
       setHaircutTornado(data);
     });
-    fetchCsv(Dataset.HaircutFlagged).then((data) => {
+    fetchGraphDataset(Dataset.HaircutFlagged).then((data) => {
       setHaircutFlagged(data);
     });
-    fetchCsv(Dataset.SeniorityTornado).then((data) => {
+    fetchGraphDataset(Dataset.SeniorityTornado).then((data) => {
       setSeniorityTornado(data);
     });
-    fetchCsv(Dataset.SeniorityFlagged).then((data) => {
+    fetchGraphDataset(Dataset.SeniorityFlagged).then((data) => {
       setSeniorityFlagged(data);
     });
   }, []);
