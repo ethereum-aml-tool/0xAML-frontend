@@ -10,6 +10,7 @@ function App() {
         <div className="flex min-h-screen flex-col items-center justify-center bg-tornado-dark text-center font-mono text-white selection:bg-green-900">
           <Routes key={location.pathname}>
             <Route path="/" element={<Home />} />
+            <Route path="/address/:address" element={<Stats />} />
             <Route path="stats" element={<Stats />} />
           </Routes>
         </div>
