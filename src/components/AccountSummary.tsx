@@ -1,7 +1,11 @@
-import { FC, useEffect, useState } from "react";
+import { FC, Suspense, useEffect, useState } from "react";
 import TransactionTable from "./TransactionTable";
 import { API_URL, EXPLORER_URL } from "../constants";
 import GraphView from "./GraphView/GraphView";
+import { useAtom } from "jotai";
+import { accountData } from "../store/account";
+import LoadingIndicator from "./LoadingIndicator";
+import { useAtomDevtools } from "jotai/devtools";
 
 enum Algorithm {
   HAIRCUT = "haircut",
@@ -11,11 +15,13 @@ enum Algorithm {
 }
 
 type AccountSummaryProps = {
-  account: Account;
   transactions?: Transaction[];
 };
 
-const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
+const AccountSummary = (props: AccountSummaryProps) => {
+  const { transactions } = props;
+  const [account] = useAtom(accountData);
+
   const [balance, setBalance] = useState<EtherscanBalance>();
   const [haircut, setHaircut] = useState<HaircutResult>();
   // const [fifo, setFifo] = useState<FifoResult>();
@@ -24,10 +30,7 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
 
   const fetchTaint = async (algorithm: Algorithm) => {
     const response = await fetch(
-      `${API_URL}/blacklist/${algorithm}/${account.address}`,
-      {
-        method: "GET",
-      }
+      `${API_URL}/blacklist/${algorithm}/${account.address}`
     );
 
     return response.json();
@@ -46,29 +49,48 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
 
   useEffect(() => {
     // Fetch balance from Etherscan
-    fetchBalance().then((balance: EtherscanBalance) =>
-      setBalance(balance ?? undefined)
-    );
+    fetchBalance()
+      .then((balance: EtherscanBalance) => setBalance(balance ?? undefined))
+      .catch(() => {
+        console.log("No balance found!");
+        setBalance(undefined);
+      });
 
     // Fetch results from blacklisting algorithms
-    fetchTaint(Algorithm.HAIRCUT).then((haircutResult: HaircutResult) =>
-      setHaircut(haircutResult ?? undefined)
-    );
+    fetchTaint(Algorithm.HAIRCUT)
+      .then((haircutResult: HaircutResult) => {
+        console.log("Setting haircut!");
+        setHaircut(haircutResult ?? undefined);
+      })
+      .catch(() => {
+        console.log("No haircut found!");
+        setHaircut(undefined);
+      });
     // fetchTaint(Algorithm.FIFO).then((fifoResult: FifoResult) =>
     //   setFifo(fifoResult ?? undefined)
     // );
-    fetchTaint(Algorithm.POISON).then((poisonResult: PoisonResult) =>
-      setPoison(poisonResult ?? undefined)
-    );
-    fetchTaint(Algorithm.SENIORITY).then((seniorityResult: SeniorityResult) =>
-      setSeniority(seniorityResult ?? undefined)
-    );
-  }, []);
+    fetchTaint(Algorithm.POISON)
+      .then((poisonResult: PoisonResult) =>
+        setPoison(poisonResult ?? undefined)
+      )
+      .catch(() => {
+        console.log("No poison found!");
+        setPoison(undefined);
+      });
+    fetchTaint(Algorithm.SENIORITY)
+      .then((seniorityResult: SeniorityResult) =>
+        setSeniority(seniorityResult ?? undefined)
+      )
+      .catch(() => {
+        console.log("No seniority found!");
+        setSeniority(undefined);
+      });
+  }, [account.address]);
 
   return (
     <div className="mt-1 p-3 text-tornado-green">
       <p>
-        <span className="text-lg font-bold italic">
+        <span className="text-xl font-bold italic">
           <a
             href={`${EXPLORER_URL}/address/${account.address}`}
             target="_blank"
@@ -79,7 +101,9 @@ const AccountSummary: FC<AccountSummaryProps> = ({ account, transactions }) => {
         </span>{" "}
         <br />
         <span className="font-bold">Balance:</span>{" "}
-        {balance ? balance?.result.toFixed(5) + " Ether" : "? ETH"}
+        {balance && typeof balance.result === "number"
+          ? balance?.result.toFixed(5) + " Ether"
+          : "? ETH"}
         <br />
         <span className="font-bold">Risk Estimation:</span>{" "}
         {account.risk_level ?? "TO BE IMPLEMENTED"}
