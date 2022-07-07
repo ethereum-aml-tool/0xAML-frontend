@@ -5,12 +5,12 @@ import DataGraph, {
   Dataset,
   fetchGraphDataset,
 } from "../components/StatsGraph";
-import blacklistedGraph from "../../assets/images/graphs/blacklisted.png";
-import ramGraph from "../../assets/images/graphs/ram.png";
-import timeGraph from "../../assets/images/graphs/time.png";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 function Stats() {
+  const navigate = useNavigate();
+
   const [poisonTornado, setPoisonTornado] = useState<DSVParsedArray<any>>();
   const [poisonFlagged, setPoisonFlagged] = useState<DSVParsedArray<any>>();
   const [haircutTornado, setHaircutTornado] = useState<DSVParsedArray<any>>();
@@ -44,30 +44,13 @@ function Stats() {
 
   return (
     <motion.div
-      className="flex min-w-full flex-col items-center justify-center text-tornado-green"
+      className="flex min-w-full flex-col items-center justify-center text-tornado-green mt-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.7 }}
       exit={{ opacity: 0 }}
     >
       <div className="flex min-w-full flex-col items-center justify-center text-tornado-green">
-        {/* <div className="flex flex-col items-center justify-center">
-        <img
-          src={blacklistedGraph}
-          alt="Number of blacklisted addresses per block"
-          className="my-3"
-        />
-        <img
-          src={ramGraph}
-          alt="Number of blacklisted addresses per block"
-          className="mb-3"
-        />
-        <img
-          src={timeGraph}
-          alt="Number of blacklisted addresses per block"
-          className="mb-3"
-        />
-      </div> */}
         {poisonTornado &&
           poisonFlagged &&
           haircutTornado &&
@@ -118,6 +101,14 @@ function Stats() {
             </div>
           )}
       </div>
+      <button
+        className="text-bold m-4 rounded-sm border-2 border-tornado-green px-4 py-2 text-tornado-green transition-all hover:bg-slate-700"
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        &#11164; Back to search
+      </button>
     </motion.div>
   );
 }
