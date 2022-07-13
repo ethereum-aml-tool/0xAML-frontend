@@ -1,11 +1,10 @@
-import { FC } from "react";
-
 type AddressInputProps = {
   hint?: string;
   onEnterPressed?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 };
 
-const AddressInput: FC<AddressInputProps> = ({ hint, onEnterPressed }) => {
+const AddressInput = (props: AddressInputProps) => {
+  const { hint, onEnterPressed } = props;
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       onEnterPressed?.(event);

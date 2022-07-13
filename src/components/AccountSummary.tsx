@@ -3,7 +3,7 @@ import TransactionTable from "./TransactionTable";
 import { API_URL, EXPLORER_URL } from "../constants";
 import GraphView from "./GraphView/GraphView";
 import { useAtom } from "jotai";
-import { accountData } from "../store/account";
+import { accountData } from "../store/store";
 import LoadingIndicator from "./LoadingIndicator";
 import { useAtomDevtools } from "jotai/devtools";
 

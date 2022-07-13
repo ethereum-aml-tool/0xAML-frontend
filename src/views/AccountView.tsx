@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUpdateAtom } from "jotai/utils";
-import { accountAddress } from "../store/account";
+import { accountAddress } from "../store/store";
 import { Suspense, useEffect } from "react";
 import LoadingIndicator from "../components/LoadingIndicator";
 import AccountSummary from "../components/AccountSummary";
