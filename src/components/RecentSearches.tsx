@@ -10,8 +10,12 @@ const RecentSearches = () => {
     console.log("RecentSearches: recentSearches", recentSearches);
   }, [recentSearches]);
 
+  if (recentSearches.length === 0) {
+    return null;
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center mt-4">
       <p className="text-lg font-bold text-tornado-green">Recently viewed:</p>
       <div className="flex flex-col items-start">
         {[...recentSearches].reverse().map((search, index) => (

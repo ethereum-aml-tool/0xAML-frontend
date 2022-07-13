@@ -24,7 +24,7 @@ const Home = () => {
       exit={{ opacity: 0 }}
     >
       <div className="flex flex-col items-center justify-center">
-        <div className="mt-4 w-96 max-w-full px-5 mb-4">
+        <div className="mt-4 w-96 max-w-full px-5">
           <AddressInput
             onEnterPressed={(e) => {
               setRecentSearches((prevSearches) => [
