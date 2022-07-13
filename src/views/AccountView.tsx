@@ -14,6 +14,7 @@ const AccountView = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = `INDAGO - ${address}`;
     setAddress(address);
   }, [address]);
 

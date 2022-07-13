@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AddressInput from "../components/AddressInput";
 import AppHeader from "../components/AppHeader";
@@ -8,7 +8,7 @@ import FooterLinks from "../components/FooterLinks";
 const Home = () => {
   const navigate = useNavigate();
 
-  const [transactions, setTransactions] = useState<Transaction[]>();
+  // const [transactions, setTransactions] = useState<Transaction[]>();
 
   // const fetchTransactions = async (address: String) => {
   //   const fromResponse = await fetch(
@@ -32,6 +32,10 @@ const Home = () => {
   //       new Date(a.block_timestamp).getTime()
   //   );
   // };
+
+  useEffect(() => {
+    document.title = `INDAGO - Home`;
+  }, []);
 
   return (
     <motion.div

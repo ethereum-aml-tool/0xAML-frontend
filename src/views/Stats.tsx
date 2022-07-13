@@ -1,4 +1,3 @@
-
 import { DSVParsedArray } from "d3";
 import { useEffect, useState } from "react";
 import DataGraph, {
@@ -21,6 +20,8 @@ function Stats() {
     useState<DSVParsedArray<any>>();
 
   useEffect(() => {
+    document.title = `INDAGO - Statistics`;
+
     // Load all CSVs
     fetchGraphDataset(Dataset.PoisonTornado).then((data) => {
       setPoisonTornado(data);
@@ -44,7 +45,7 @@ function Stats() {
 
   return (
     <motion.div
-      className="flex min-w-full flex-col items-center justify-center text-tornado-green mt-8"
+      className="mt-8 flex min-w-full flex-col items-center justify-center text-tornado-green"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.7 }}
