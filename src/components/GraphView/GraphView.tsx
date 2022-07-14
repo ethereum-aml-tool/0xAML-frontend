@@ -132,8 +132,10 @@ const GraphView: FC<GraphViewProps> = ({ address }) => {
       {nodes.length > 0 && (
         <div className="mt-2 flex flex-col items-center justify-center">
           <p className="text-lg font-bold">DAR (Deposit Address Reuse)</p>
-          <p className="italic"><span className="text-blue-600">blue</span> = deposit address</p>
-          <div className="mt-1 h-80 w-[95vw] rounded-sm border border-solid border-tornado-green">
+          <p className="italic">
+            <span className="text-blue-600">blue</span> = deposit address
+          </p>
+          <div className="mt-1 h-80 w-[95vw] rounded-sm border border-solid border-tornado-green hover:cursor-grab">
             <ReactFlow nodes={nodes} edges={edges} fitView />
           </div>
         </div>
