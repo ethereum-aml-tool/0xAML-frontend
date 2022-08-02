@@ -30,6 +30,9 @@ const GraphView: FC<GraphViewProps> = ({ address }) => {
       }
     );
 
+    const json = await response.json();
+    console.log(json);
+
     return response.json();
   };
 
