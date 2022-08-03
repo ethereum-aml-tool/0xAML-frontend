@@ -5,7 +5,6 @@ import GraphView from "./GraphView/GraphView";
 import { useAtom } from "jotai";
 import { accountData } from "../store/store";
 import LoadingIndicator from "./LoadingIndicator";
-import { useAtomDevtools } from "jotai/devtools";
 
 enum Algorithm {
   HAIRCUT = "haircut",
@@ -23,10 +22,12 @@ const AccountSummary = (props: AccountSummaryProps) => {
   const [account] = useAtom(accountData);
 
   const [balance, setBalance] = useState<EtherscanBalance>();
-  const [haircut, setHaircut] = useState<HaircutResult>();
+  const [haircut, setHaircut] = useState<HaircutResult | undefined>(undefined);
   // const [fifo, setFifo] = useState<FifoResult>();
-  const [poison, setPoison] = useState<PoisonResult>();
-  const [seniority, setSeniority] = useState<SeniorityResult>();
+  const [poison, setPoison] = useState<PoisonResult | undefined>(undefined);
+  const [seniority, setSeniority] = useState<SeniorityResult | undefined>(
+    undefined
+  );
 
   const fetchTaint = async (algorithm: Algorithm) => {
     const response = await fetch(
@@ -102,7 +103,7 @@ const AccountSummary = (props: AccountSummaryProps) => {
         <br />
         <span className="font-bold">Balance:</span>{" "}
         {balance && typeof balance.result === "number"
-          ? balance?.result.toFixed(5) + " Ether"
+          ? balance?.result?.toFixed(5) + " Ether"
           : "? ETH"}
         <br />
         <span className="font-bold">Risk Estimation:</span>{" "}
@@ -110,9 +111,9 @@ const AccountSummary = (props: AccountSummaryProps) => {
         <br />
         <span className="font-bold">Haircut:</span>{" "}
         {haircut ? (
-          haircut.taint != 0 ? (
+          haircut.taint != undefined && haircut.taint != 0 ? (
             <span className="font-bold text-red-600">
-              TRUE | {haircut.taint.toFixed(3)} Ether
+              TRUE | {haircut?.taint?.toFixed(3)} Ether
             </span>
           ) : (
             "FALSE"
@@ -147,9 +148,9 @@ const AccountSummary = (props: AccountSummaryProps) => {
         <br />
         <span className="font-bold">Seniority:</span>{" "}
         {seniority ? (
-          seniority.tainted_balance != 0 ? (
+          seniority.tainted_balance != undefined && seniority.tainted_balance != 0 ? (
             <span className="font-bold text-red-600">
-              TRUE | {seniority.tainted_balance.toFixed(3)} Ether
+              TRUE | {seniority?.tainted_balance?.toFixed(3)} Ether
             </span>
           ) : (
             "FALSE"
