@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactFlow, {
   Node,
   Edge,
@@ -6,7 +6,7 @@ import ReactFlow, {
   MarkerType,
 } from "react-flow-renderer";
 import dagre from "dagre";
-import { API_URL, EXPLORER_URL } from "../../constants";
+import { API_URL } from "../../constants";
 
 import "./GraphView.css";
 import { useAtomValue } from "jotai";

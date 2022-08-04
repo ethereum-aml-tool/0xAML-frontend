@@ -1,11 +1,11 @@
 .react-flow__node {
-    background-color: #45F1A7;
+    background-color: #45F1A7 !important;
 }
 
 .react-flow__edge-path {
-    stroke: #45F1A7;
+    stroke: #45F1A7 !important;
 }
 
 .react-flow__attribution {
-    display: none;
+    display: none !important;
 }
