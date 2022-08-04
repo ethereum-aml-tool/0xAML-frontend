@@ -9,6 +9,8 @@ import dagre from "dagre";
 import { API_URL, EXPLORER_URL } from "../../constants";
 
 import "./GraphView.css";
+import { useAtomValue } from "jotai";
+import { accountAddress } from "../../store/store";
 
 /*
 {
@@ -17,11 +19,9 @@ import "./GraphView.css";
 }
 */
 
-type GraphViewProps = {
-  address: string;
-};
+const GraphView = () => {
+  const address = useAtomValue(accountAddress);
 
-const GraphView: FC<GraphViewProps> = ({ address }) => {
   const fetchGraph = async (address: string) => {
     const response = await fetch(
       `${API_URL}/cluster/get-dar/?address=${address}`,
@@ -77,7 +77,7 @@ const GraphView: FC<GraphViewProps> = ({ address }) => {
       nodes[parseInt(edge.target)].type = "output";
 
       // change text color of deposit addresses
-      nodes[parseInt(edge.target)].style = {color: "blue"};
+      nodes[parseInt(edge.target)].style = { color: "blue" };
     });
 
     // Graph layouting with Dagre
@@ -120,12 +120,20 @@ const GraphView: FC<GraphViewProps> = ({ address }) => {
   const [edges, setEdges] = useState<Edge[]>([]);
 
   useEffect(() => {
-    fetchGraph(address).then((graph: DARGraph) => {
-      const { nodes, edges } = graphToReactFlow(graph);
-      setNodes(nodes);
-      setEdges(edges);
-    });
-  }, []);
+    console.log(`GraphView: ${address}`);
+    if (address) {
+      fetchGraph(address)
+        .then((graph: DARGraph) => {
+          const { nodes, edges } = graphToReactFlow(graph);
+          setNodes(nodes);
+          setEdges(edges);
+        })
+        .catch((err) => {
+          setNodes([]);
+          setEdges([]);
+        });
+    }
+  }, [address]);
 
   return (
     <div className="">

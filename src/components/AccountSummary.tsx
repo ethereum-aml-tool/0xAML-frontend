@@ -148,7 +148,8 @@ const AccountSummary = (props: AccountSummaryProps) => {
         <br />
         <span className="font-bold">Seniority:</span>{" "}
         {seniority ? (
-          seniority.tainted_balance != undefined && seniority.tainted_balance != 0 ? (
+          seniority.tainted_balance != undefined &&
+          seniority.tainted_balance != 0 ? (
             <span className="font-bold text-red-600">
               TRUE | {seniority?.tainted_balance?.toFixed(3)} Ether
             </span>
@@ -168,7 +169,7 @@ const AccountSummary = (props: AccountSummaryProps) => {
         </div>
       )}
       <div>
-        <GraphView address={account.address} />
+        <GraphView />
       </div>
     </div>
   );
