@@ -6,10 +6,6 @@ import { recentSearchesAtom } from "../store/store";
 const RecentSearches = () => {
   const recentSearches = useAtomValue(recentSearchesAtom);
 
-  useEffect(() => {
-    console.log("RecentSearches: recentSearches", recentSearches);
-  }, [recentSearches]);
-
   if (recentSearches.length === 0) {
     return null;
   }

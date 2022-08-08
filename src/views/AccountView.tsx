@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUpdateAtom } from "jotai/utils";
-import { accountAddress } from "../store/store";
+import { accountAddressAtom } from "../store/store";
 import { Suspense, useEffect } from "react";
 import LoadingIndicator from "../components/LoadingIndicator";
 import AccountSummary from "../components/AccountSummary";
@@ -9,7 +9,7 @@ import AccountSummary from "../components/AccountSummary";
 const AccountView = () => {
   let params = useParams();
   const { address } = params;
-  const setAddress = useUpdateAtom(accountAddress);
+  const setAddress = useUpdateAtom(accountAddressAtom);
 
   const navigate = useNavigate();
 

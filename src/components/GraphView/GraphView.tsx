@@ -10,7 +10,8 @@ import { API_URL } from "../../constants";
 
 import "./GraphView.css";
 import { useAtomValue } from "jotai";
-import { accountAddress } from "../../store/store";
+import { accountAddressAtom } from "../../store/store";
+import { Link } from "react-router-dom";
 
 /*
 {
@@ -20,7 +21,7 @@ import { accountAddress } from "../../store/store";
 */
 
 const GraphView = () => {
-  const address = useAtomValue(accountAddress);
+  const address = useAtomValue(accountAddressAtom);
 
   const fetchGraph = async (address: string) => {
     const response = await fetch(
@@ -42,15 +43,18 @@ const GraphView = () => {
         //type: "input",
         data: {
           label: (
-            <a
-              href={`/address/${graph.nodes[i].address}`}
-              //target="_blank"
+            <Link
+              to={`/address/${graph.nodes[i].address}`}
               className={`hover:underline ${
                 graph.nodes[i].flagged ? "text-red-500" : ""
-              } ${graph.nodes[i].address.toLowerCase() === address?.toLowerCase() ? "font-bold" : ""}`}
+              } ${
+                graph.nodes[i].address.toLowerCase() === address?.toLowerCase()
+                  ? "font-bold"
+                  : ""
+              }`}
             >
               {graph.nodes[i].address.substring(0, 10)}...
-            </a>
+            </Link>
           ),
         },
         position: { x: 250, y: 25 * i * 3 },

@@ -6,12 +6,24 @@ import { API_URL } from "../constants";
 /*
     ACCOUNT
 */
-export const accountAddress = atom<string | undefined>(undefined);
-export const accountData = atomWithQuery((get) => ({
-  queryKey: ["account", get(accountAddress)],
+export const accountAddressAtom = atom<string | undefined>(undefined);
+export const blacklistSummaryAtom = atomWithQuery((get) => ({
+  queryKey: ["account", get(accountAddressAtom)],
   queryFn: async ({ queryKey: [, address] }) => {
-    const response = await fetch(`${API_URL}/accounts/${address}`);
-    return response.json();
+    if (address !== undefined) {
+      const response = await fetch(`${API_URL}/blacklist/summary/${address}`);
+      return response.json();
+    }
+  },
+}));
+export const balanceAtom = atomWithQuery((get) => ({
+  queryKey: ["balance", get(accountAddressAtom)],
+  queryFn: async ({ queryKey: [, address] }) => {
+    if (address !== undefined) {
+      const response = await fetch(`${API_URL}/etherscan/balance/${address}`);
+      console.log(response);
+      return response.json();
+    }
   },
 }));
 
