@@ -43,8 +43,8 @@ const GraphView = () => {
         data: {
           label: (
             <a
-              href={`https://etherscan.io/address/${graph.nodes[i].address}`}
-              target="_blank"
+              href={`/address/${graph.nodes[i].address}`}
+              //target="_blank"
               className={`hover:underline ${
                 graph.nodes[i].flagged ? "text-red-500" : ""
               } ${graph.nodes[i].address.toLowerCase() === address?.toLowerCase() ? "font-bold" : ""}`}
