@@ -47,7 +47,7 @@ const GraphView = () => {
               target="_blank"
               className={`hover:underline ${
                 graph.nodes[i].flagged ? "text-red-500" : ""
-              } ${graph.nodes[i].address === address ? "font-bold" : ""}`}
+              } ${graph.nodes[i].address.toLowerCase() === address?.toLowerCase() ? "font-bold" : ""}`}
             >
               {graph.nodes[i].address.substring(0, 10)}...
             </a>
