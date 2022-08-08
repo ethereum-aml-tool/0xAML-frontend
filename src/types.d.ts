@@ -14,12 +14,12 @@ type Transaction = {
 };
 
 type DARGraph = {
-  nodes: string[];
+  nodes: { address: string; flagged: boolean }[];
   edges: {
     from: number;
     to: number;
   }[];
-}
+};
 
 type EtherscanBalance = {
   status: string;
@@ -28,9 +28,9 @@ type EtherscanBalance = {
 };
 
 type HaircutResult = {
-    address: string;
-    balance: number;
-    taint: number;
+  address: string;
+  balance: number;
+  taint: number;
 };
 
 type FifoResult = {

@@ -45,9 +45,11 @@ const GraphView = () => {
             <a
               href={`https://etherscan.io/address/${graph.nodes[i]}`}
               target="_blank"
-              className="hover:underline"
+              className={`hover:underline ${
+                graph.nodes[i].flagged ? "text-red-500" : ""
+              } ${graph.nodes[i].address === address ? "font-bold" : ""}`}
             >
-              {graph.nodes[i].substring(0, 10)}...
+              {graph.nodes[i].address.substring(0, 10)}...
             </a>
           ),
         },
