@@ -21,7 +21,17 @@ export const balanceAtom = atomWithQuery((get) => ({
   queryFn: async ({ queryKey: [, address] }) => {
     if (address !== undefined) {
       const response = await fetch(`${API_URL}/etherscan/balance/${address}`);
-      console.log(response);
+      return response.json();
+    }
+  },
+}));
+export const graphAtom = atomWithQuery((get) => ({
+  queryKey: ["darGraph", get(accountAddressAtom)],
+  queryFn: async ({ queryKey: [, address] }) => {
+    if (address !== undefined) {
+      const response = await fetch(
+        `${API_URL}/cluster/get-dar/?address=${address}`
+      );
       return response.json();
     }
   },

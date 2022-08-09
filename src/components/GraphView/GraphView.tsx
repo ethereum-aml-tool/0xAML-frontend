@@ -10,7 +10,7 @@ import { API_URL } from "../../constants";
 
 import "./GraphView.css";
 import { useAtomValue } from "jotai";
-import { accountAddressAtom } from "../../store/store";
+import { accountAddressAtom, graphAtom } from "../../store/store";
 import { Link } from "react-router-dom";
 
 /*
@@ -22,17 +22,10 @@ import { Link } from "react-router-dom";
 
 const GraphView = () => {
   const address = useAtomValue(accountAddressAtom);
+  const graphData = useAtomValue(graphAtom);
 
-  const fetchGraph = async (address: string) => {
-    const response = await fetch(
-      `${API_URL}/cluster/get-dar/?address=${address}`,
-      {
-        method: "GET",
-      }
-    );
-
-    return response.json();
-  };
+  const [nodes, setNodes] = useState<Node[]>([]);
+  const [edges, setEdges] = useState<Edge[]>([]);
 
   const graphToReactFlow = (graph: DARGraph) => {
     const nodes: Node[] = [];
@@ -122,24 +115,17 @@ const GraphView = () => {
     return { nodes, edges };
   };
 
-  const [nodes, setNodes] = useState<Node[]>([]);
-  const [edges, setEdges] = useState<Edge[]>([]);
-
   useEffect(() => {
-    console.log(`GraphView: ${address}`);
-    if (address) {
-      fetchGraph(address)
-        .then((graph: DARGraph) => {
-          const { nodes, edges } = graphToReactFlow(graph);
-          setNodes(nodes);
-          setEdges(edges);
-        })
-        .catch((err) => {
-          setNodes([]);
-          setEdges([]);
-        });
+    console.log(graphData);
+    if (address && graphData.nodes && graphData.edges) {
+      const { nodes, edges } = graphToReactFlow(graphData);
+      setNodes(nodes);
+      setEdges(edges);
+    } else {
+      setNodes([]);
+      setEdges([]);
     }
-  }, [address]);
+  }, [graphData]);
 
   return (
     <div className="">
