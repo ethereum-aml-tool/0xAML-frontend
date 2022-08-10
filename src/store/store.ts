@@ -44,3 +44,20 @@ export const recentSearchesAtom = atomWithStorage<string[]>(
   "recentSearches",
   []
 );
+
+/*
+    MISC
+*/
+export const serverStatusAtom = atomWithQuery(() => ({
+  queryKey: ["serverStatus"],
+  queryFn: async () => {
+    const response = await fetch(`${API_URL}/health`);
+
+    if (response.status === 200) {
+      return true;
+    }
+
+    return false;
+  },
+  initialData: true,
+}));

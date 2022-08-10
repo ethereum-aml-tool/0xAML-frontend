@@ -4,19 +4,10 @@ import Home from "./views/Home";
 import Stats from "./views/Stats";
 import AccountView from "./views/AccountView";
 import AppHeader from "./components/AppHeader";
-import { useEffect } from "react";
-import { API_URL } from "./constants";
+import ServerStatus from "./components/ServerStatus";
+import { Suspense } from "react";
 
 function App() {
-  useEffect(() => {
-    // pinging the server to wake if asleep
-    const interval = setInterval(() => {
-      fetch(API_URL + "/health");
-    }, 60000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <Router>
       <AnimatePresence exitBeforeEnter>
@@ -27,6 +18,7 @@ function App() {
             <Route path="/address/:address" element={<AccountView />} />
             <Route path="stats" element={<Stats />} />
           </Routes>
+          <ServerStatus />
         </div>
       </AnimatePresence>
     </Router>
