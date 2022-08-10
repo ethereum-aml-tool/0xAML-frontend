@@ -1,11 +1,22 @@
 import { AnimatePresence } from "framer-motion";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./views/Home";
 import Stats from "./views/Stats";
 import AccountView from "./views/AccountView";
 import AppHeader from "./components/AppHeader";
+import { useEffect } from "react";
+import { API_URL } from "./constants";
 
 function App() {
+  useEffect(() => {
+    // pinging the server to wake if asleep
+    const interval = setInterval(() => {
+      fetch(API_URL + "/health");
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <Router>
       <AnimatePresence exitBeforeEnter>

@@ -1,11 +1,10 @@
 import { motion } from "framer-motion";
 import { useUpdateAtom } from "jotai/utils";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AddressInput from "../components/AddressInput";
 import FooterLinks from "../components/FooterLinks";
 import RecentSearches from "../components/RecentSearches";
-import { API_URL } from "../constants";
 import { recentSearchesAtom } from "../store/store";
 
 const Home = () => {
@@ -15,9 +14,6 @@ const Home = () => {
 
   useEffect(() => {
     document.title = `INDAGO - Home`;
-
-    // Pinging the server to wake if asleep
-    fetch(`${API_URL}`);
   }, []);
 
   return (
