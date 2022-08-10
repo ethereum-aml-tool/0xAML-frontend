@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import AddressInput from "../components/AddressInput";
 import FooterLinks from "../components/FooterLinks";
 import RecentSearches from "../components/RecentSearches";
+import { API_URL } from "../constants";
 import { recentSearchesAtom } from "../store/store";
 
 const Home = () => {
@@ -14,6 +15,9 @@ const Home = () => {
 
   useEffect(() => {
     document.title = `INDAGO - Home`;
+
+    // Pinging the server to wake if asleep
+    fetch(`${API_URL}`);
   }, []);
 
   return (
@@ -27,10 +31,9 @@ const Home = () => {
         <div className="mt-4 w-96 max-w-full px-5">
           <AddressInput
             onEnterPressed={(e) => {
-              setRecentSearches((prevSearches) => [
-                ...prevSearches,
-                e.currentTarget.value,
-              ].slice(-3));
+              setRecentSearches((prevSearches) =>
+                [...prevSearches, e.currentTarget.value].slice(-3)
+              );
               navigate(`/address/${e.currentTarget.value}`);
             }}
           />
