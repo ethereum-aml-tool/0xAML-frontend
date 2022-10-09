@@ -40,7 +40,7 @@ const AccountSummary = () => {
         <br />
         <span className="font-bold">Haircut:</span>{" "}
         {haircut_taint ? (
-          haircut_taint != null && haircut_taint != 0 ? (
+          haircut_taint != null && haircut_taint >= 0.01 ? (
             <span className="font-bold text-red-600">
               TRUE | {haircut_taint?.toFixed(3)} Ether
             </span>
